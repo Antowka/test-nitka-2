@@ -1,0 +1,25 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+version =  '0.1.0'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Tree calculater',
+                'Implementation-Version': version
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+mainClassName = "ru.antowka.Main"
+
+dependencies {
+    testCompile "junit:junit:4.12"
+}
