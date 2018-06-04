@@ -1,54 +1,54 @@
 package ru.antowka.utils;
 
 import org.junit.Test;
-import ru.antowka.model.Node;
-import ru.antowka.model.Tree;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class TreeUtilsTest {
+import static org.junit.Assert.assertThat;
+import static org.hamcrest.CoreMatchers.is;
 
+public class TasksTest {
 
+    ArrayList<Integer> task1DataSet =  new ArrayList<>(Arrays.asList(1,7,2,2,2,8,13,21,1,2,18,2,8,21,9,8,1,1,1));
+    ArrayList<Integer> task2DataSet =   new ArrayList<>(Arrays.asList(1,7,2,15,2,8,13,21,1,2,18,2,8,21,9,8,1));
+
+    /**
+     * Удалить из List числа, повторяющиеся три и больше раз подряд
+     */
     @Test
-    public void calculateHeight() {
-        int height = TreeUtils.calculateHeight(build());
-        assertEquals(height, 5);
+    public void task1() {
+        List result = removeDuplicate(task1DataSet);
+        System.out.println(result);
+        assertThat(result, is(Arrays.asList(1, 7, 8, 13, 21, 1, 2, 18, 2, 8, 21, 9, 8)));
     }
 
-    private Tree build() {
+    /**
+     * Удалить из List числа, повторяющиеся три и больше раз не обязательно подряд
+     */
+    @Test
+    public void task2() {
+        task2DataSet.sort(Integer::compareTo);
+        List result = removeDuplicate(task2DataSet);
+        System.out.println(result);
+        assertThat(result, is(Arrays.asList(2, 7, 9, 13, 15, 18, 21, 21)));
+    }
 
-        Tree tree = new Tree();
+    private List removeDuplicate(List<Integer> list) {
 
-        //level 1 - root
-        Node root = new Node(null, 0);
-        tree.setRoot(root);
+        if (list.size() < 3) {
+            return list;
+        }
 
-        //level 2
-        Node nodeL1N1 = new Node(root, 1);
-        Node nodeL1N2 = new Node(root, 2);
-        tree.getRoot().getChildren().add(nodeL1N1);
-        tree.getRoot().getChildren().add(nodeL1N2);
+        for (int i = 0;list.size() - 1 > i; i++) {
+            Integer firstElement = list.get(i);
+            if (list.size() >= i + 3 && firstElement.equals(list.get(i + 1)) && firstElement.equals(list.get(i + 2))) {
+                list.subList(i, i + 3).clear();
+                return removeDuplicate(list);
+            }
+        }
 
-        //level 3
-        Node nodeL2N1 = new Node(nodeL1N1, 3);
-        Node nodeL2N2 = new Node(nodeL1N2, 4);
-        Node nodeL2N3 = new Node(nodeL1N2, 5);
-        nodeL1N1.getChildren().add(nodeL2N1);
-        nodeL1N2.getChildren().add(nodeL2N2);
-        nodeL1N2.getChildren().add(nodeL2N3);
-
-        //level 4
-        Node nodeL3N1 = new Node(nodeL2N1, 6);
-        Node nodeL3N2 = new Node(nodeL2N2, 7);
-        nodeL2N1.getChildren().add(nodeL3N1);
-        nodeL2N2.getChildren().add(nodeL3N2);
-
-        //level 5
-        Node nodeL4N1 = new Node(nodeL3N1, 9);
-        nodeL3N1.getChildren().add(nodeL4N1);
-
-
-        return tree;
+        return list;
     }
 }

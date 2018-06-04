@@ -13,6 +13,7 @@ public class TreeUtilsTest {
     @Test
     public void calculateHeight() {
         int height = TreeUtils.calculateHeight(build());
+        System.out.println("Height of tree is " + height);
         assertEquals(height, 5);
     }
 
